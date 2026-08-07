@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdbool.h>	
 
-// --------------------------- Building brick: Nand Chip ---------------------------
+// --------------------------- 0 Building brick: Nand Chip ---------------------------
 
 bool nand(bool a, bool b){
 	bool and_ab = a && b;
@@ -9,7 +9,7 @@ bool nand(bool a, bool b){
 	return out;
 }
 
-// --------------------------- Elementary chips ---------------------------
+// --------------------------- 1a Elementary chips ---------------------------
 bool not(bool in){
 	bool out = nand(in,in);
 	return out;
@@ -56,7 +56,7 @@ void dmux(bool in, bool sel, bool *a, bool *b){
 }
 
 
-// --------------------------- MultiBit Variant chips ---------------------------
+// --------------------------- 1b MultiBit Variant chips ---------------------------
 // helper print function
 void print_bits(bool bits[], int size){
 	for (int i=0; i<size; i++){
@@ -90,7 +90,7 @@ void mux16(bool a[16], bool b[16], bool sel, bool out[16]){
 }
 
 
-// --------------------------- MultiWay Variant chips ---------------------------
+// --------------------------- 1c MultiWay Variant chips ---------------------------
 bool or8way(bool in[8]){
 	bool or01 = or(in[0],in[1]);
 	bool or23 = or(in[2],in[3]);
@@ -181,41 +181,39 @@ void dmux8way(
 	dmux4way(efgh,e,f,g,h,subset);
 }
 
-// --------------------------- Chips Testing ---------------------------
 
-int main() {
-    int passed = 0;
-    int total = 0;
-    for (int in = 0; in < 2; in++) {
-        for (int sel = 0; sel < 8; sel++) {
-            bool sel_bits[3] = {
-                (sel >> 2) & 1,
-                (sel >> 1) & 1,
-                sel & 1
-            };
-            bool a, b, c, d, e, f, g, h;
-            dmux8way(
-                in,
-                &a, &b, &c, &d, &e, &f, &g, &h,
-                sel_bits
-            );
-            bool expected[8] = {0, 0, 0, 0, 0, 0, 0, 0};
-            if (in)
-                expected[sel] = true;
-            bool correct =
-                a == expected[0] &&
-                b == expected[1] &&
-                c == expected[2] &&
-                d == expected[3] &&
-                e == expected[4] &&
-                f == expected[5] &&
-                g == expected[6] &&
-                h == expected[7];
-            total++;
-            if (correct)
-                passed++;
-        }
-    }
-    printf("Tests passed: %d/%d\n", passed, total);
-    return 0;
+// --------------------------- 2 Adder Chips ---------------------------
+void halfadder(bool a, bool b, bool *sum, bool *carry){
+	*sum = xor(a,b);
+	*carry = and(a,b);
+}
+
+void fulladder(bool a, bool b, bool carry_in, bool *sum, bool *carry_out){
+	bool xor_a_b = xor(a,b);
+	*sum = xor(xor_a_b,carry_in);
+
+	bool ab = and(a,b);
+	bool cin_xor_ab = and(xor_a_b,carry_in);
+	*carry_out = or(ab,cin_xor_ab);
+}
+
+void add16(bool a[16], bool b[16], bool out[16]){
+	bool sum[16];
+	bool c_out[16];
+
+	halfadder(a[15], b[15], &sum[15], &c_out[15]);   // start at LSB (index 15)
+
+	for (int i = 14; i >= 0; i--){                    // walk toward MSB (index 0)
+		fulladder(a[i], b[i], c_out[i+1], &sum[i], &c_out[i]);
+	}
+
+	for (int i = 0; i < 16; i++){
+		out[i] = sum[i];
+	}
+}
+
+void inc16(bool in[16], bool out[16]){
+	bool one[16] = {false};
+	one[15] = true;
+	add16(in,one,out);
 }
