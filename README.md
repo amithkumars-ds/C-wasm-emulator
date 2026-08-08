@@ -15,10 +15,4 @@ Work in progress. Basic logic gate chips and ALU implemented so far.
 - [ ] CPU
 - [ ] Compile to WASM for a browser demo
 
-## Structure
- 
-- `chips/` — chip implementations
-- `src/` — core emulator source
-- `Makefile` — build config
-
  
