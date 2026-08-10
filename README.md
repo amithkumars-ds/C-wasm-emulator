@@ -9,7 +9,7 @@ Work in progress. Basic logic gate chips and ALU implemented so far.
  
 ## Roadmap
  
-- [ ] Basic logic gates
+- [x] Basic logic gates
 - [ ] ALU
 - [ ] Memory
 - [ ] CPU
