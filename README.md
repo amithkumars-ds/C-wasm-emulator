@@ -10,7 +10,7 @@ Work in progress. Basic logic gate chips and ALU implemented so far.
 ## Roadmap
  
 - [x] Basic logic gates
-- [ ] ALU
+- [x] ALU
 - [ ] Memory
 - [ ] CPU
 - [ ] Compile to WASM for a browser demo
