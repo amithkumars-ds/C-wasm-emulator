@@ -2,11 +2,17 @@
 
 #include <array>
 
+// typedef for custom data types
 using Word = std::array<bool, 16>;
 using halfWord = std::array<bool, 8>;
 
 using sel2 = std::array<bool, 2>;
 using sel3 = std::array<bool, 3>;
+
+namespace {
+    std::array<Word, 8> ram_state{};
+}
+
 
 // Elementary chips
 bool nand(bool a, bool b);
@@ -15,7 +21,7 @@ bool and_gate(bool a, bool b);
 bool or_gate(bool a, bool b);
 bool xor_gate(bool a, bool b);
 bool mux(bool a, bool b, bool sel);
-void dmux(bool in, bool sel, bool* a, bool* b);
+void dmux(bool in, bool sel, bool& a, bool& b);
 
 // 16-bit chips
 void not16(const Word& in, Word& out);
@@ -51,23 +57,23 @@ void mux8way16(
 
 void dmux4way(
     bool in,
-    bool* a,
-    bool* b,
-    bool* c,
-    bool* d,
+    bool& a,
+    bool& b,
+    bool& c,
+    bool& d,
     const sel2& sel
 );
 
 void dmux8way(
     bool in,
-    bool* a,
-    bool* b,
-    bool* c,
-    bool* d,
-    bool* e,
-    bool* f,
-    bool* g,
-    bool* h,
+    bool& a,
+    bool& b,
+    bool& c,
+    bool& d,
+    bool& e,
+    bool& f,
+    bool& g,
+    bool& h,
     const sel3& sel
 );
 
@@ -84,3 +90,11 @@ void fulladder(
 
 void add16(const Word& a, const Word& b, Word& out);
 void inc16(const Word& in, Word& out);
+
+
+// memory chips
+bool bit(bool in, bool load);
+
+Word register16(Word& state, const Word& in, bool load);
+
+Word ram8(const Word& in, bool load, const sel3& address);

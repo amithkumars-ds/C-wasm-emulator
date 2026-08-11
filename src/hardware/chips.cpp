@@ -1,13 +1,6 @@
 #include "chips.h"
 #include <cstdio>
 
-// typedef for Word
-using Word = std::array<bool,16>;
-using halfWord = std::array<bool,8>;
-
-using sel2 = std::array<bool,2>;
-using sel3 = std::array<bool,3>;
-
 // --------------------------- 0 Building brick: Nand Chip ---------------------------
 
 bool nand(bool a, bool b){
@@ -42,9 +35,9 @@ bool mux(bool a, bool b, bool sel){
 	return out;
 }
 
-void dmux(bool in, bool sel, bool *a, bool *b){
-	*a = in && !sel;
-	*b = in && sel;
+void dmux(bool in, bool sel, bool& a, bool& b){
+	a = in && !sel;
+	b = in && sel;
 }
 
 
@@ -154,37 +147,37 @@ void mux8way16(
 
 void dmux4way(
 	bool in, 
-	bool *a, 
-	bool *b, 
-	bool *c, 
-	bool *d, 
+	bool& a, 
+	bool& b, 
+	bool& c, 
+	bool& d, 
 	const sel2& sel
 ){
 	bool ab;
 	bool cd;
 
-	dmux(in,sel[0],&ab,&cd);
+	dmux(in,sel[0],ab,cd);
 	dmux(ab,sel[1],a,b);
 	dmux(cd,sel[1],c,d);
 }
 
 void dmux8way(
 	bool in, 
-	bool *a, 
-	bool *b, 
-	bool *c, 
-	bool *d, 
-	bool *e, 
-	bool *f, 
-	bool *g, 
-	bool *h, 
+	bool& a, 
+	bool& b, 
+	bool& c, 
+	bool& d, 
+	bool& e, 
+	bool& f, 
+	bool& g, 
+	bool& h, 
 	const sel3& sel
 ){
 	bool abcd;
 	bool efgh;
 	sel2 subset = {sel[1], sel[2]};
 
-	dmux(in, sel[0], &abcd, &efgh);
+	dmux(in, sel[0], abcd, efgh);
 	dmux4way(abcd,a,b,c,d,subset);
 	dmux4way(efgh,e,f,g,h,subset);
 }
