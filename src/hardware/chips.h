@@ -6,8 +6,12 @@
 using Word = std::array<bool, 16>;
 using halfWord = std::array<bool, 8>;
 
-using sel2 = std::array<bool, 2>;
-using sel3 = std::array<bool, 3>;
+using sel2  = std::array<bool, 2>;
+using sel3  = std::array<bool, 3>;
+using sel6  = std::array<bool, 6>;
+using sel9  = std::array<bool, 9>;
+using sel12 = std::array<bool, 12>;
+using sel14 = std::array<bool, 14>;
 
 namespace {
     std::array<Word, 8> ram_state{};
