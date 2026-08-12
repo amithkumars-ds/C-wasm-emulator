@@ -5,7 +5,7 @@ Built as a learning project to understand how a computer works from first princi
 
 ## Status
  
-Work in progress. Basic logic gate chips and ALU implemented so far.
+Work in progress. Basic logic gate chips, ALU, memory implemented so far.
  
 ## Roadmap
  
