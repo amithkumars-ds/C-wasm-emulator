@@ -13,6 +13,8 @@ using sel9  = std::array<bool, 9>;
 using sel12 = std::array<bool, 12>;
 using sel14 = std::array<bool, 14>;
 
+using add15 = std::array<bool, 15>;
+
 namespace {
     std::array<Word, 8> ram_state{};
 }
