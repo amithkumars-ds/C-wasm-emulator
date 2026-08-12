@@ -74,3 +74,11 @@ Word ram16k(
         4
     >& state
 );
+
+Word programCounter(
+	Word in, 
+	bool load, 
+	int inc, 
+	bool reset, 
+	Word& state
+);

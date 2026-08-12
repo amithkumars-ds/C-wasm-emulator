@@ -343,3 +343,26 @@ Word ram16k(
 
     return out;
 }
+
+
+// ============================================================
+// PC: Program Counter
+// ============================================================
+Word programCounter(Word in, bool load, int inc, bool reset, Word& state){
+	Word incOut{}, incOrHold, loadOrInc, nextPC;
+	Word zero{};
+	bool loadOrReset, shouldLoad;
+	 
+	// calculate next value with priority: reset > load > inc
+	inc16(state, incOut);
+	mux16(state, incOut, inc, incOrHold);
+	mux16(incOrHold, in, load, loadOrInc);
+	mux16(loadOrInc, zero, reset, nextPC);
+
+	// register load signal: load if reset
+	loadOrReset = or_gate(reset, load);
+	shouldLoad = or_gate(loadOrReset, inc);
+	register16(nextPC,shouldLoad,state);
+
+	return state;
+}
